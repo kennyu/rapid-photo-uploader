@@ -53,7 +53,19 @@ public class ImageProcessingService {
             Photo photo = photoRepository.findById(photoId)
                     .orElseThrow(() -> new RuntimeException("Photo not found: " + photoId));
             
+            log.info("Waiting 2 seconds for S3 eventual consistency...");
+            Thread.sleep(2000); // Wait for S3 eventual consistency
+            
+            // Check if file exists before downloading
+            boolean fileExists = storageService.fileExists(photo.getStorageKey());
+            log.info("File exists check for key {}: {}", photo.getStorageKey(), fileExists);
+            
+            if (!fileExists) {
+                throw new RuntimeException("File not found in S3 after waiting: " + photo.getStorageKey());
+            }
+            
             // Download original image from S3
+            log.info("Downloading file from S3 with key: {}", photo.getStorageKey());
             InputStream originalImage = storageService.downloadFile(photo.getStorageKey());
             
             // Compress image

@@ -31,13 +31,15 @@ public class S3EventNotificationHandler {
     public void handleS3Event(Map<String, Object> event) {
         try {
             String eventName = (String) event.get("eventName");
-            log.info("Processing S3 event: {}", eventName);
+            log.info("S3 event received (DISABLED): {}", eventName);
             
-            if (eventName != null && eventName.contains("ObjectCreated")) {
-                handleObjectCreated(event);
-            } else if (eventName != null && eventName.contains("ObjectRemoved")) {
-                handleObjectRemoved(event);
-            }
+            // DISABLED: We manually call /uploads/{uploadJobId}/complete from mobile app
+            // This handler was causing premature processing before files were uploaded
+            // if (eventName != null && eventName.contains("ObjectCreated")) {
+            //     handleObjectCreated(event);
+            // } else if (eventName != null && eventName.contains("ObjectRemoved")) {
+            //     handleObjectRemoved(event);
+            // }
             
         } catch (Exception e) {
             log.error("Error processing S3 event", e);
