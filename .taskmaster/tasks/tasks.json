@@ -1,0 +1,1053 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Backend Project Setup with Spring Boot and DDD Structure",
+        "description": "Initialize the backend project using Java Spring Boot, enforcing Domain-Driven Design (DDD), CQRS, and Vertical Slice Architecture (VSA) principles.",
+        "details": "Use Spring Boot 3.x with Java 17+. Set up a modular project structure: /domain, /application, /infrastructure, /api. Use Gradle or Maven for dependency management. Integrate MapStruct for DTO mapping. Enforce CQRS by separating command and query handlers. Organize code into vertical slices (e.g., UploadPhotoSlice, GetPhotoMetadataSlice).",
+        "testStrategy": "Validate project builds, directory structure matches DDD/CQRS/VSA, and basic health endpoint responds.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Scaffold Spring Boot Project with Java 17+ and Dependency Management",
+            "description": "Initialize a new Spring Boot 3.x project using Java 17 or higher, selecting Gradle or Maven for dependency management.",
+            "dependencies": [],
+            "details": "Use Spring Initializr or IDE tools to generate the project. Set Java version to 17+, select Gradle or Maven, and include essential dependencies (Spring Web, etc.). Ensure the project builds and runs a basic application class.",
+            "status": "done",
+            "testStrategy": "Build and run the project; verify the application starts without errors."
+          },
+          {
+            "id": 2,
+            "title": "Establish DDD-Compliant Modular Folder Structure",
+            "description": "Organize the project into /domain, /application, /infrastructure, and /api modules to enforce Domain-Driven Design principles.",
+            "dependencies": [
+              1
+            ],
+            "details": "Create top-level packages or modules for domain, application, infrastructure, and API layers. Ensure each layer is logically separated and ready for further development.",
+            "status": "done",
+            "testStrategy": "Check that the directory structure matches DDD conventions and each module is accessible."
+          },
+          {
+            "id": 3,
+            "title": "Implement CQRS Handler Separation and Vertical Slice Organization",
+            "description": "Set up clear separation between command and query handlers, and organize code into vertical slices (e.g., UploadPhotoSlice, GetPhotoMetadataSlice).",
+            "dependencies": [
+              2
+            ],
+            "details": "Define interfaces and base classes for command and query handlers. Create example slices with their own handlers, DTOs, and services, ensuring each slice is self-contained.",
+            "status": "done",
+            "testStrategy": "Verify that commands and queries are handled by separate classes and that vertical slices are independently testable."
+          },
+          {
+            "id": 4,
+            "title": "Integrate MapStruct for DTO Mapping",
+            "description": "Add MapStruct to the project for efficient mapping between domain entities and DTOs.",
+            "dependencies": [
+              1
+            ],
+            "details": "Add MapStruct dependencies to build configuration. Create sample mappers for at least one entity and DTO pair. Ensure annotation processing is enabled.",
+            "status": "done",
+            "testStrategy": "Write a unit test to verify that MapStruct correctly maps between entity and DTO."
+          },
+          {
+            "id": 5,
+            "title": "Configure Gradle or Maven for Modular Build and Dependency Management",
+            "description": "Set up Gradle or Maven to support modular builds, manage dependencies, and enable annotation processing for MapStruct.",
+            "dependencies": [
+              1,
+              4
+            ],
+            "details": "Configure build files to support multi-module structure if needed. Ensure dependencies are correctly scoped and annotation processing is enabled for MapStruct.",
+            "status": "done",
+            "testStrategy": "Build the project, verify all modules compile, and MapStruct-generated code is present."
+          },
+          {
+            "id": 6,
+            "title": "Implement and Test a Basic Health Endpoint",
+            "description": "Create a simple health check endpoint in the API module to verify application startup and basic routing.",
+            "dependencies": [
+              2
+            ],
+            "details": "Add a REST controller with a /health endpoint returning a static status. Ensure it is accessible via HTTP GET.",
+            "status": "done",
+            "testStrategy": "Start the application and send a GET request to /health; expect a 200 OK response with the correct payload."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Database Schema Design and PostgreSQL Integration",
+        "description": "Design and implement PostgreSQL schema for User, Photo, and Upload Job Status entities.",
+        "details": "Define tables: users, photos, upload_jobs. Use UUIDs as primary keys. Store photo metadata (filename, size, tags, status, user_id, timestamps). Use Flyway or Liquibase for migrations. Integrate Spring Data JPA (v3.x) for ORM.",
+        "testStrategy": "Run migration scripts, verify tables and relationships, and test CRUD operations via repository layer.",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Entity Modeling for User, Photo, and Upload Job Status",
+            "description": "Define the entities, attributes, and relationships for users, photos, and upload job status.",
+            "dependencies": [],
+            "details": "Create an ER diagram or equivalent documentation specifying fields for each entity: users (UUID, name, email, timestamps), photos (UUID, filename, size, tags, status, user_id, timestamps), upload_jobs (UUID, status, photo_id, timestamps). Define foreign key relationships and ensure normalization.",
+            "status": "done",
+            "testStrategy": "Review the entity model for completeness, normalization, and referential integrity."
+          },
+          {
+            "id": 2,
+            "title": "Migration Script Creation Using Flyway or Liquibase",
+            "description": "Write migration scripts to create tables and constraints in PostgreSQL.",
+            "dependencies": [
+              1
+            ],
+            "details": "Develop SQL migration scripts (or XML/YAML for Liquibase) to create users, photos, and upload_jobs tables with UUID primary keys, foreign keys, and appropriate indexes. Ensure scripts are idempotent and follow naming conventions.",
+            "status": "done",
+            "testStrategy": "Run migrations on a clean database, verify table creation, constraints, and rollback capability."
+          },
+          {
+            "id": 3,
+            "title": "UUID Primary Key Setup and Referential Integrity",
+            "description": "Configure UUIDs as primary keys and enforce foreign key constraints between tables.",
+            "dependencies": [
+              2
+            ],
+            "details": "Use PostgreSQL's uuid type for all primary keys. Set up default UUID generation (e.g., gen_random_uuid()). Define foreign keys: photos.user_id references users.id, upload_jobs.photo_id references photos.id. Enforce ON DELETE/UPDATE rules as needed.",
+            "status": "done",
+            "testStrategy": "Insert and delete records to verify UUID generation and referential integrity enforcement."
+          },
+          {
+            "id": 4,
+            "title": "Spring Data JPA Entity and ORM Mapping Integration",
+            "description": "Implement Java entity classes and configure Spring Data JPA mappings for all tables.",
+            "dependencies": [
+              3
+            ],
+            "details": "Create User, Photo, and UploadJob entity classes with UUID fields and JPA annotations. Map relationships (e.g., @ManyToOne, @OneToMany). Configure application properties for PostgreSQL and ensure correct dialect and UUID handling.",
+            "status": "done",
+            "testStrategy": "Start the application, verify that entities map to tables, and that schema auto-validation passes."
+          },
+          {
+            "id": 5,
+            "title": "CRUD Repository Implementation and Testing",
+            "description": "Develop and test Spring Data JPA repositories for all entities to support CRUD operations.",
+            "dependencies": [
+              4
+            ],
+            "details": "Create repository interfaces for User, Photo, and UploadJob entities. Implement unit and integration tests for create, read, update, and delete operations, including queries by foreign keys and status fields.",
+            "status": "done",
+            "testStrategy": "Run repository tests to verify all CRUD operations and query correctness."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Cloud Object Storage Integration (AWS S3/Azure Blob)",
+        "description": "Integrate backend with AWS S3 (preferred) or Azure Blob Storage for scalable photo storage.",
+        "details": "Use AWS SDK for Java v2.x or Azure Blob Storage SDK. Implement service for generating pre-signed upload URLs and storing/retrieving files. Configure secure credentials via environment variables or secrets manager. Support multipart uploads for large files.",
+        "testStrategy": "Unit test storage service, verify upload and download of test files, and check pre-signed URL validity.",
+        "priority": "high",
+        "dependencies": [
+          1,
+          2
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Set Up Cloud Storage SDK (AWS S3 or Azure Blob) in Backend Project",
+            "description": "Install and configure the AWS SDK for Java v2.x (preferred) or Azure Blob Storage SDK in the backend project.",
+            "dependencies": [],
+            "details": "Add the appropriate SDK dependency to the project build file (e.g., Maven or Gradle). Initialize the SDK client with basic configuration. Ensure the SDK version matches project requirements and supports all needed features.",
+            "status": "done",
+            "testStrategy": "Verify SDK installation by running a simple list-buckets (S3) or list-containers (Azure) operation in a local environment."
+          },
+          {
+            "id": 2,
+            "title": "Implement Secure Credential Management for Cloud Storage Access",
+            "description": "Configure secure storage and retrieval of cloud storage credentials using environment variables or a secrets manager.",
+            "dependencies": [
+              1
+            ],
+            "details": "Set up environment variables or integrate with a secrets manager (e.g., AWS Secrets Manager, Azure Key Vault). Ensure credentials are never hardcoded. Update application configuration to load credentials securely at runtime.",
+            "status": "done",
+            "testStrategy": "Attempt to access cloud storage with valid and invalid credentials. Confirm that credentials are not exposed in logs or code."
+          },
+          {
+            "id": 3,
+            "title": "Develop Pre-Signed URL Generation Service",
+            "description": "Implement a backend service to generate pre-signed URLs for secure client-side uploads and downloads.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Create endpoints that generate pre-signed URLs for upload and download operations. Ensure URLs have configurable expiration and permissions. Use SDK methods for pre-signed URL creation.",
+            "status": "done",
+            "testStrategy": "Unit test URL generation logic. Validate that generated URLs allow file upload/download only within the allowed time window and permissions."
+          },
+          {
+            "id": 4,
+            "title": "Implement File Upload and Download Logic",
+            "description": "Build backend logic to handle file uploads and downloads using the cloud storage SDK, supporting both direct and pre-signed URL flows.",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Implement methods for uploading files to and downloading files from cloud storage. Support both direct SDK-based operations and flows using pre-signed URLs. Handle error cases and edge conditions (e.g., file not found, permission denied).",
+            "status": "done",
+            "testStrategy": "Upload and download test files of various sizes. Verify file integrity and error handling for missing or unauthorized files."
+          },
+          {
+            "id": 5,
+            "title": "Add Multipart Upload Support for Large Files",
+            "description": "Extend upload logic to support multipart uploads for large files, improving reliability and throughput.",
+            "dependencies": [
+              1,
+              2,
+              4
+            ],
+            "details": "Use SDK multipart upload APIs to split large files into parts, upload them in parallel, and complete the upload. Handle retries and part tracking. Ensure compatibility with pre-signed URL flows if required.",
+            "status": "done",
+            "testStrategy": "Upload large files (>100MB) using multipart logic. Simulate network interruptions and verify upload resumption and completion."
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Authentication and Authorization (JWT-Based)",
+        "description": "Implement JWT-based authentication for securing API endpoints for both web and mobile clients.",
+        "details": "Use Spring Security 6.x. Implement login endpoint issuing JWTs. Secure all API endpoints with JWT validation. Store user credentials securely (BCrypt). Provide mock authentication for local development.",
+        "testStrategy": "Integration test login, token issuance, and protected endpoint access. Validate token expiration and invalid token handling.",
+        "priority": "high",
+        "dependencies": [
+          1,
+          2
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Login Endpoint for JWT Issuance",
+            "description": "Create a REST endpoint that authenticates users and issues JWTs upon successful login.",
+            "dependencies": [],
+            "details": "Develop a POST /auth/login endpoint using Spring Security 6.x. Validate user credentials against the database, and upon success, generate and return a JWT containing user claims. Ensure the endpoint is unprotected so users can log in without a token.",
+            "status": "done",
+            "testStrategy": "Unit and integration test: submit valid and invalid credentials, verify JWT issuance and error handling."
+          },
+          {
+            "id": 2,
+            "title": "Implement JWT Generation and Validation Logic",
+            "description": "Develop services for securely generating and validating JWTs for authentication and authorization.",
+            "dependencies": [
+              1
+            ],
+            "details": "Create a JwtService class to handle token creation, signing, and validation. Use a secure secret key and set appropriate expiration times. Implement methods to extract claims and validate token integrity and expiration.",
+            "status": "done",
+            "testStrategy": "Unit test token generation and validation, including edge cases for expired and malformed tokens."
+          },
+          {
+            "id": 3,
+            "title": "Secure API Endpoints with JWT Authentication",
+            "description": "Configure Spring Security to require valid JWTs for protected API endpoints.",
+            "dependencies": [
+              2
+            ],
+            "details": "Set up a security filter chain that intercepts requests, validates JWTs, and enforces authentication for all endpoints except login and mock endpoints. Implement a custom JWT authentication filter and configure exception handling for unauthorized access.",
+            "status": "done",
+            "testStrategy": "Integration test: access protected endpoints with valid, expired, and invalid tokens; verify correct access control and error responses."
+          },
+          {
+            "id": 4,
+            "title": "Implement Secure Password Hashing and Storage",
+            "description": "Ensure user passwords are securely hashed and stored using BCrypt.",
+            "dependencies": [],
+            "details": "Integrate BCryptPasswordEncoder for password hashing during user registration and authentication. Store only hashed passwords in the database, and verify hashes during login.",
+            "status": "done",
+            "testStrategy": "Unit test password hashing and verification; confirm that plain-text passwords are never stored."
+          },
+          {
+            "id": 5,
+            "title": "Set Up Mock Authentication for Local Development",
+            "description": "Provide a mock authentication mechanism to facilitate local development and testing without real credentials.",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "details": "Implement a mock authentication provider or endpoint that issues test JWTs for predefined users. Ensure this is only enabled in local or test environments and does not affect production security.",
+            "status": "done",
+            "testStrategy": "Integration test: verify mock login issues valid JWTs and allows access to protected endpoints in local mode."
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Asynchronous Photo Upload API (Command Side)",
+        "description": "Develop an asynchronous REST API endpoint for initiating photo uploads, supporting up to 100 concurrent uploads per session.",
+        "details": "Implement POST /photos/upload endpoint. Accepts batch file metadata, returns pre-signed URLs for direct client upload to S3/Blob. Use Spring WebFlux for non-blocking request handling. Enqueue upload jobs for status tracking.",
+        "testStrategy": "Simulate concurrent upload requests (100+), verify API responsiveness and correct pre-signed URL generation.",
+        "priority": "high",
+        "dependencies": [
+          3,
+          4
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design and Implement POST /photos/upload Endpoint with Batch Metadata Support",
+            "description": "Create a REST API endpoint that accepts batch photo metadata and initiates asynchronous upload jobs.",
+            "dependencies": [],
+            "details": "Define the request and response models for batch photo metadata. Implement the POST /photos/upload endpoint using Spring WebFlux to ensure non-blocking request handling. Validate input for up to 100 concurrent uploads per session. Ensure the endpoint can parse and process batch metadata efficiently.",
+            "status": "done",
+            "testStrategy": "Unit and integration tests for endpoint input validation, batch metadata parsing, and response structure."
+          },
+          {
+            "id": 2,
+            "title": "Generate Pre-Signed URLs and Return to Client for Direct S3/Blob Upload",
+            "description": "Integrate logic to generate pre-signed URLs for each photo in the batch and return them to the client for direct upload.",
+            "dependencies": [
+              1
+            ],
+            "details": "For each photo metadata item received, generate a pre-signed URL for S3/Blob storage. Ensure URLs are securely generated and have appropriate expiration. Return a structured response containing all pre-signed URLs mapped to their respective files. Handle errors gracefully if URL generation fails for any item.",
+            "status": "done",
+            "testStrategy": "Mock S3/Blob service to verify correct URL generation and response mapping for up to 100 files."
+          },
+          {
+            "id": 3,
+            "title": "Enqueue Upload Jobs for Status Tracking and Scalability",
+            "description": "Implement asynchronous job queuing for each upload request to enable status tracking and scalable processing.",
+            "dependencies": [
+              2
+            ],
+            "details": "After generating pre-signed URLs, enqueue upload jobs for each photo using a reactive queue or event-driven mechanism. Integrate with a job tracking system to monitor upload progress and status. Ensure the queuing mechanism supports high concurrency and does not block API responsiveness.",
+            "status": "done",
+            "testStrategy": "Simulate high-concurrency upload requests, verify jobs are enqueued and tracked correctly without blocking API responses."
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Upload Job Status Tracking and Retry Logic",
+        "description": "Implement robust tracking of upload job status (Uploading, Failed, Complete) with retry mechanisms for failed uploads.",
+        "details": "Store upload job status in upload_jobs table. Use event-driven updates (e.g., S3 event notifications or polling). Implement retry logic with exponential backoff for transient failures. Use Spring Retry or Resilience4j.",
+        "testStrategy": "Simulate upload failures, verify status transitions and retry attempts. Check database for accurate job status.",
+        "priority": "high",
+        "dependencies": [
+          5
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Update Database Schema for Upload Job Status Tracking",
+            "description": "Modify the upload_jobs table to support status tracking fields for Uploading, Failed, and Complete states.",
+            "dependencies": [],
+            "details": "Add or update columns in the upload_jobs table to store the current status, timestamps for status changes, and any relevant error or retry metadata. Ensure the schema supports efficient querying and updates for job status.",
+            "status": "done",
+            "testStrategy": "Apply schema migration and verify new fields exist. Insert and update records to ensure status transitions are stored correctly."
+          },
+          {
+            "id": 2,
+            "title": "Integrate Event-Driven Status Updates via S3 Notifications or Polling",
+            "description": "Implement event-driven mechanisms to update job status based on S3 events or polling results.",
+            "dependencies": [
+              1
+            ],
+            "details": "Configure S3 event notifications to trigger updates when objects are created or fail to upload. Use Spring Boot listeners for SQS/SNS or polling logic to detect upload completion or failure, and update the upload_jobs table accordingly.[1][2][3][4]",
+            "status": "done",
+            "testStrategy": "Simulate S3 events and verify that job statuses in the database are updated in response to notifications or polling."
+          },
+          {
+            "id": 3,
+            "title": "Implement Retry Logic for Failed Uploads",
+            "description": "Develop logic to automatically retry failed uploads, ensuring robustness against transient errors.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Use Spring Retry or Resilience4j to wrap upload operations. On failure, trigger retries according to configured policies, updating job status and retry counters in the database.",
+            "status": "done",
+            "testStrategy": "Force upload failures and verify that retries are attempted as per policy, and that status and retry counts are accurately tracked."
+          },
+          {
+            "id": 4,
+            "title": "Configure Exponential Backoff for Retry Mechanism",
+            "description": "Set up exponential backoff parameters for retrying failed uploads to avoid overwhelming the system.",
+            "dependencies": [
+              3
+            ],
+            "details": "Configure Spring Retry or Resilience4j to use exponential backoff for retries, specifying initial delay, multiplier, and maximum attempts. Ensure configuration is externalized for easy tuning.",
+            "status": "done",
+            "testStrategy": "Test with simulated transient failures and verify that retry intervals increase exponentially and respect the configured limits."
+          },
+          {
+            "id": 5,
+            "title": "Integrate with S3 Event Notification Destinations",
+            "description": "Connect the application to S3 event notification destinations (SNS, SQS, Lambda) for real-time status updates.",
+            "dependencies": [
+              2
+            ],
+            "details": "Configure S3 bucket to send notifications to the chosen destination. Implement or configure listeners in the application to consume these notifications and trigger status updates.[1][2][3][4]",
+            "status": "done",
+            "testStrategy": "Upload and delete files in S3, verify that notifications are received and processed, and that job statuses are updated accordingly."
+          },
+          {
+            "id": 6,
+            "title": "Develop Comprehensive Test Coverage for Failure and Retry Scenarios",
+            "description": "Create automated tests to cover upload failures, retries, and status transitions.",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "details": "Write unit and integration tests simulating various failure scenarios, including transient and permanent errors. Validate correct status transitions, retry attempts, and final outcomes in the database.",
+            "status": "done",
+            "testStrategy": "Run automated tests that simulate S3 failures, network issues, and verify that the system behaves as expected under all scenarios."
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Photo Metadata Query API (Query Side)",
+        "description": "Develop REST API endpoints for querying photo metadata and upload job status, adhering to CQRS.",
+        "details": "Implement GET /photos, GET /photos/{id}, and GET /upload-jobs endpoints. Use Spring Data JPA for efficient queries. Return paginated, filterable results. Ensure separation from command-side logic.",
+        "testStrategy": "Test endpoints for correct data retrieval, pagination, and filtering. Validate against sample data.",
+        "priority": "high",
+        "dependencies": [
+          2,
+          5
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design and Implement Photo Metadata Query Endpoints",
+            "description": "Create REST API endpoints for querying photo metadata, supporting pagination and filtering, using Spring Data JPA.",
+            "dependencies": [],
+            "details": "Define the Photo entity and repository interfaces. Implement GET /photos for paginated, filterable lists and GET /photos/{id} for single photo metadata retrieval. Use JpaRepository or PagingAndSortingRepository for efficient queries. Ensure endpoints are read-only and separated from command-side logic.",
+            "status": "done",
+            "testStrategy": "Write integration tests to verify correct data retrieval, pagination, and filtering. Use sample data to validate endpoint responses."
+          },
+          {
+            "id": 2,
+            "title": "Develop Upload Job Status Query Endpoint",
+            "description": "Implement a REST API endpoint to retrieve the status of photo upload jobs, supporting pagination and filtering.",
+            "dependencies": [
+              1
+            ],
+            "details": "Define the UploadJob entity and repository. Implement GET /upload-jobs endpoint to return paginated, filterable upload job status data. Ensure the endpoint is read-only and adheres to CQRS separation.",
+            "status": "done",
+            "testStrategy": "Test endpoint with various job statuses and pagination/filtering parameters. Validate responses against known upload job records."
+          },
+          {
+            "id": 3,
+            "title": "Ensure CQRS Separation and API Documentation",
+            "description": "Verify that query-side logic is fully separated from command-side logic and document the API endpoints.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Review code to confirm no command-side operations are present in query endpoints. Add OpenAPI/Swagger documentation for all query endpoints, including request/response schemas and filtering options.",
+            "status": "done",
+            "testStrategy": "Code review for CQRS compliance. Generate and inspect API documentation. Confirm endpoints are discoverable and accurately described."
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "title": "Image Processing and Compression Service",
+        "description": "Implement backend service for image compression and optional AI-based tagging upon upload completion.",
+        "details": "Use Java libraries (e.g., imgscalr, Thumbnailator) for compression. Integrate with an AI service (e.g., AWS Rekognition, OpenAI Vision API) for image tagging if enabled. Process images asynchronously post-upload.",
+        "testStrategy": "Upload images, verify compression, and check for generated tags in metadata. Measure processing time and resource usage.",
+        "priority": "medium",
+        "dependencies": [
+          3,
+          6
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Image Compression Logic Using Java Libraries",
+            "description": "Develop the core image compression functionality using Java libraries such as imgscalr or Thumbnailator, supporting both lossy and lossless compression as required.",
+            "dependencies": [],
+            "details": "Set up a service class that accepts uploaded images and applies compression using configurable parameters (e.g., quality, format). Ensure support for common formats (JPEG, PNG, WebP, TIFF) and allow selection of compression type. Use imgscalr or Thumbnailator for basic operations, and consider JDeli for advanced TIFF/WebP support if needed[1][4][6].",
+            "status": "done",
+            "testStrategy": "Unit test with sample images of various formats and sizes. Verify output file size, format, and visual quality. Compare against baseline images."
+          },
+          {
+            "id": 2,
+            "title": "Integrate Optional AI-Based Image Tagging Service",
+            "description": "Integrate with an external AI service (e.g., AWS Rekognition, OpenAI Vision API) to generate tags for images if tagging is enabled.",
+            "dependencies": [
+              1
+            ],
+            "details": "Design a pluggable interface for AI tagging. Implement adapters for at least one AI service (e.g., AWS Rekognition). Ensure the tagging step is optional and can be toggled per upload. Parse and store tags in a structured format for later retrieval.",
+            "status": "done",
+            "testStrategy": "Mock AI service responses for unit tests. For integration, upload images and verify tags are generated and stored correctly when tagging is enabled."
+          },
+          {
+            "id": 3,
+            "title": "Set Up Asynchronous Image Processing Pipeline",
+            "description": "Configure asynchronous processing so that image compression and tagging occur after upload completion, without blocking the upload response.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Use Java concurrency utilities or Spring's @Async to offload processing tasks. Ensure robust error handling and job status tracking. Integrate with existing upload job tracking (see Task 6).",
+            "status": "done",
+            "testStrategy": "Simulate concurrent uploads and verify that processing occurs asynchronously. Check that upload responses are not delayed and processing status is tracked."
+          },
+          {
+            "id": 4,
+            "title": "Update Image Metadata with Compression and Tagging Results",
+            "description": "Store and update metadata for each image, including compression details (e.g., original and compressed size, format) and AI-generated tags if available.",
+            "dependencies": [
+              3
+            ],
+            "details": "Extend the image metadata schema to include compression stats and tags. Ensure atomic updates to metadata after processing. Provide API endpoints to retrieve updated metadata.",
+            "status": "done",
+            "testStrategy": "After processing, retrieve metadata and verify all fields are correctly populated. Test for consistency and correctness with various processing outcomes."
+          },
+          {
+            "id": 5,
+            "title": "Conduct Performance and Resource Utilization Testing",
+            "description": "Test the service under load to evaluate processing speed, memory/CPU usage, and scalability for large batches and varied image types.",
+            "dependencies": [
+              4
+            ],
+            "details": "Use benchmarking tools (e.g., JMH, custom scripts) to simulate high-volume uploads and processing. Measure throughput, latency, and resource consumption. Identify bottlenecks and optimize as needed[5][7].",
+            "status": "done",
+            "testStrategy": "Run load tests with diverse image sets. Collect metrics on processing time, resource usage, and error rates. Compare results against performance targets."
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "title": "Web Client Project Setup (React + TypeScript)",
+        "description": "Initialize the web client using React 18+ and TypeScript, enforcing a component-based architecture.",
+        "details": "Use Create React App or Vite. Set up ESLint, Prettier, and strict TypeScript config. Organize code into feature-based folders (e.g., /upload, /gallery, /auth). Integrate React Query for API state management.",
+        "testStrategy": "Verify project builds, linting passes, and initial page renders.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Scaffold React + TypeScript Project",
+            "description": "Initialize a new React 18+ project with TypeScript using Create React App or Vite.",
+            "dependencies": [],
+            "details": "Run npx create-react-app my-app --template typescript or use Vite's TypeScript template. Ensure the project builds and runs. Confirm tsconfig.json is generated and TypeScript is enabled for .tsx files.",
+            "status": "done",
+            "testStrategy": "Run npm start or equivalent to verify the app builds and renders a default page."
+          },
+          {
+            "id": 2,
+            "title": "Configure ESLint, Prettier, and Strict TypeScript Settings",
+            "description": "Set up ESLint and Prettier for code linting and formatting. Enforce strict TypeScript configuration.",
+            "dependencies": [
+              1
+            ],
+            "details": "Install ESLint and Prettier with TypeScript plugins. Create .eslintrc and .prettierrc files. Update tsconfig.json to enable strict mode and recommended compiler options. Add lint and format scripts to package.json.",
+            "status": "done",
+            "testStrategy": "Run lint and format scripts. Confirm code is auto-formatted and lint errors are reported for violations."
+          },
+          {
+            "id": 3,
+            "title": "Organize Feature-Based Folder Structure",
+            "description": "Restructure the src directory into feature-based folders such as /upload, /gallery, and /auth.",
+            "dependencies": [
+              1
+            ],
+            "details": "Create folders for each major feature. Move or create placeholder component files in each folder. Ensure imports and exports are updated to reflect the new structure.",
+            "status": "done",
+            "testStrategy": "Verify that the app still builds and runs after restructuring. Check that feature folders exist and contain index.tsx or relevant files."
+          },
+          {
+            "id": 4,
+            "title": "Integrate React Query for API State Management",
+            "description": "Install and configure React Query to manage API state across the application.",
+            "dependencies": [
+              1,
+              3
+            ],
+            "details": "Install @tanstack/react-query. Set up QueryClient and QueryClientProvider at the app root. Add a sample query hook in one feature folder (e.g., /gallery) to demonstrate usage.",
+            "status": "done",
+            "testStrategy": "Render a component using useQuery to fetch sample data. Confirm data loads and React Query Devtools (if enabled) show query state."
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "title": "Mobile Client Project Setup (React Native)",
+        "description": "Initialize the mobile client using React Native (Expo or bare workflow), mirroring web functionality.",
+        "details": "Use React Native 0.73+ with TypeScript. Set up ESLint, Prettier, and navigation (React Navigation v7+). Organize code into feature-based folders. Ensure parity with web client structure.",
+        "testStrategy": "Verify app builds and runs on iOS and Android simulators. Check linting and initial navigation.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Initialize React Native Project (Expo or Bare Workflow)",
+            "description": "Set up a new React Native project using either Expo or the bare workflow, ensuring compatibility with React Native 0.73+.",
+            "dependencies": [],
+            "details": "Use the React Native CLI or Expo CLI to create the project. Confirm React Native version is 0.73 or higher. Choose Expo for easier setup or bare workflow for more native control. Verify initial app runs on both iOS and Android simulators.",
+            "status": "done",
+            "testStrategy": "Run the default app on iOS and Android simulators to confirm successful initialization."
+          },
+          {
+            "id": 2,
+            "title": "Configure TypeScript for React Native",
+            "description": "Integrate TypeScript into the project, ensuring strict type safety and proper configuration.",
+            "dependencies": [
+              1
+            ],
+            "details": "Install TypeScript and required type definitions. Add a robust tsconfig.json with strict options (e.g., strict, esModuleInterop, skipLibCheck). Rename files to .ts/.tsx as needed. Define interfaces/types for props and state in components.",
+            "status": "done",
+            "testStrategy": "Check for type errors in the IDE and run tsc to ensure no compilation errors. Confirm type safety in sample components."
+          },
+          {
+            "id": 3,
+            "title": "Set Up ESLint and Prettier for Code Quality",
+            "description": "Configure ESLint and Prettier to enforce consistent code style and catch common errors.",
+            "dependencies": [
+              2
+            ],
+            "details": "Install ESLint, Prettier, and relevant plugins (eslint-config-prettier, eslint-plugin-react, @typescript-eslint). Create configuration files (.eslintrc.js, .prettierrc). Integrate with TypeScript parser. Add lint and format scripts to package.json.",
+            "status": "done",
+            "testStrategy": "Run lint and format scripts. Confirm that code adheres to style rules and that linting passes without errors."
+          },
+          {
+            "id": 4,
+            "title": "Implement Navigation Using React Navigation v7+",
+            "description": "Set up navigation structure using React Navigation v7+, including type-safe navigation parameters.",
+            "dependencies": [
+              2
+            ],
+            "details": "Install React Navigation v7+ and required dependencies. Create navigation folder and centralize navigation logic. Define navigation parameter types in a types/navigation.ts file. Implement a basic stack or tab navigator.",
+            "status": "done",
+            "testStrategy": "Navigate between sample screens on both platforms. Validate type safety for navigation props and parameters."
+          },
+          {
+            "id": 5,
+            "title": "Organize Codebase into Feature-Based Folders",
+            "description": "Structure the project into feature-based folders to mirror the web client architecture and improve maintainability.",
+            "dependencies": [
+              2
+            ],
+            "details": "Create folders for each major feature (e.g., /upload, /gallery, /auth). Place related components, hooks, and types within each folder. Ensure consistency with web client structure for easier cross-platform development.",
+            "status": "done",
+            "testStrategy": "Review folder structure for parity with web client. Confirm that imports and module resolution work as expected."
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "title": "Web Client: Asynchronous Batch Photo Upload UI",
+        "description": "Implement a responsive UI for selecting and uploading up to 100 photos concurrently, with real-time progress indicators.",
+        "details": "Use Uppy.js (v3+) for robust file upload handling. Display individual and batch progress bars. Use React Query for upload status polling. Ensure UI remains responsive during uploads.",
+        "testStrategy": "Upload 100 photos, verify UI responsiveness, progress accuracy, and error handling.",
+        "priority": "high",
+        "dependencies": [
+          9,
+          5,
+          7
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Integrate Uppy.js for Batch Photo Selection and Upload",
+            "description": "Set up Uppy.js (v3+) in the React project to enable users to select and upload up to 100 photos concurrently, configuring restrictions and plugins as needed.",
+            "dependencies": [],
+            "details": "Install Uppy.js and required plugins (Dashboard, XHRUpload, ImageEditor). Configure Uppy to allow up to 100 images, restrict to image file types, and set up the Dashboard UI. Ensure XHRUpload is configured with the correct endpoint and field name. Implement event handlers for upload success, error, and completion to manage upload state and errors.",
+            "status": "done",
+            "testStrategy": "Select and upload 100 images, verify all are accepted, and uploads are initiated with correct configuration."
+          },
+          {
+            "id": 2,
+            "title": "Implement Real-Time Progress Indicators for Individual and Batch Uploads",
+            "description": "Develop UI components to display real-time progress bars for each photo and for the overall batch upload, ensuring accurate and responsive feedback.",
+            "dependencies": [
+              1
+            ],
+            "details": "Use Uppy event hooks (such as 'upload-progress', 'upload-success', and 'complete') to update progress state in React. Render individual progress bars for each file and a batch progress bar summarizing overall upload status. Ensure UI remains responsive and updates in real time as uploads progress or errors occur.",
+            "status": "done",
+            "testStrategy": "Upload multiple images, observe individual and batch progress bars, and verify they reflect actual upload progress and completion."
+          },
+          {
+            "id": 3,
+            "title": "Integrate React Query for Upload Status Polling and UI Responsiveness",
+            "description": "Leverage React Query to poll and synchronize upload status, ensuring the UI remains responsive and accurately reflects backend state during uploads.",
+            "dependencies": [
+              2
+            ],
+            "details": "Set up React Query hooks to poll the backend for upload status updates, especially for long-running uploads or when uploads may complete out-of-band. Synchronize Uppy state with backend status to handle edge cases (e.g., network interruptions, backend errors). Ensure UI remains interactive and provides clear feedback throughout the upload process.",
+            "status": "done",
+            "testStrategy": "Simulate network interruptions and backend delays, verify UI remains responsive, and upload status is accurately reflected via polling."
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "title": "Mobile Client: Asynchronous Batch Photo Upload UI",
+        "description": "Implement a mobile UI for selecting and uploading up to 100 photos concurrently, with real-time progress indicators.",
+        "details": "Use react-native-image-picker for file selection. Implement concurrent uploads using fetch or axios. Display progress bars using react-native-progress. Ensure navigation remains smooth during uploads.",
+        "testStrategy": "Upload 100 photos, verify UI responsiveness, progress accuracy, and error handling on both platforms.",
+        "priority": "high",
+        "dependencies": [
+          10,
+          5,
+          7
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Photo Selection UI with react-native-image-picker",
+            "description": "Create a user interface that allows users to select up to 100 photos from their device using react-native-image-picker.",
+            "dependencies": [],
+            "details": "Integrate react-native-image-picker to enable multi-photo selection. Ensure the UI clearly indicates the selection limit and provides feedback if users attempt to select more than 100 photos. Store selected photo metadata (URIs, file names, etc.) in component state for further processing.",
+            "status": "done",
+            "testStrategy": "Test by selecting various numbers of photos, including edge cases (0, 1, 100, and >100). Verify that the UI enforces the selection limit and displays selected photo previews."
+          },
+          {
+            "id": 2,
+            "title": "Develop Concurrent Batch Upload Logic with Progress Tracking",
+            "description": "Implement asynchronous concurrent upload of selected photos using fetch or axios, and track individual upload progress.",
+            "dependencies": [
+              1
+            ],
+            "details": "For each selected photo, initiate an upload request using fetch or axios with multipart/form-data encoding. Use Promise.all or similar to manage concurrent uploads. Integrate progress tracking for each upload using axios/fetch progress events, updating state accordingly. Handle errors and retries for failed uploads.",
+            "status": "done",
+            "testStrategy": "Simulate uploading 100 photos to a test server. Monitor network requests and ensure all uploads proceed concurrently. Verify that progress events are received and errors are handled gracefully."
+          },
+          {
+            "id": 3,
+            "title": "Design and Integrate Real-Time Progress UI with react-native-progress",
+            "description": "Display real-time progress bars for each photo upload and ensure smooth navigation during the upload process.",
+            "dependencies": [
+              2
+            ],
+            "details": "Use react-native-progress to render individual progress bars for each uploading photo. Ensure the UI remains responsive and navigation is not blocked during uploads. Provide visual feedback for completed, in-progress, and failed uploads. Optionally, allow users to cancel or retry uploads.",
+            "status": "done",
+            "testStrategy": "Upload a batch of photos and observe the progress UI. Navigate between screens during uploads to confirm smooth transitions. Verify that progress bars update in real time and reflect upload status accurately."
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "title": "Web Client: Photo Gallery, Tagging, and Download UI",
+        "description": "Develop a web interface for viewing, tagging, and downloading uploaded photos.",
+        "details": "Use React components for gallery grid, tag editor, and download buttons. Fetch photo metadata via API. Support tag editing and download via pre-signed URLs.",
+        "testStrategy": "Verify gallery loads, tags can be edited, and downloads succeed for various photo types.",
+        "priority": "medium",
+        "dependencies": [
+          11,
+          7
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Responsive Photo Gallery Grid Component",
+            "description": "Create a React component to display uploaded photos in a responsive grid layout, fetching photo metadata via API.",
+            "dependencies": [],
+            "details": "Use a library such as react-photo-gallery or custom implementation to render a grid that adapts to screen size. Fetch photo metadata (URLs, dimensions, tags) from the backend API and display thumbnails. Ensure accessibility and maintain aspect ratios. Integrate loading spinners for image fetch states.",
+            "status": "done",
+            "testStrategy": "Verify gallery renders correctly on various screen sizes, images load with correct aspect ratios, and loading indicators appear during fetch."
+          },
+          {
+            "id": 2,
+            "title": "Develop Tag Editing UI for Photos",
+            "description": "Build a tag editor interface allowing users to view, add, and remove tags for each photo in the gallery.",
+            "dependencies": [
+              1
+            ],
+            "details": "Integrate a tag editor (e.g., using chips or input fields) within each photo card or modal. Connect to API endpoints for fetching and updating tags. Ensure tag changes are reflected in the UI and persisted to the backend. Provide feedback for successful and failed tag updates.",
+            "status": "done",
+            "testStrategy": "Test adding, removing, and editing tags for multiple photos. Confirm tag changes persist after reload and error handling works for failed updates."
+          },
+          {
+            "id": 3,
+            "title": "Add Download Functionality via Pre-Signed URLs",
+            "description": "Implement download buttons for each photo, enabling users to download images using pre-signed URLs.",
+            "dependencies": [
+              1
+            ],
+            "details": "Display a download button on each photo card. When clicked, fetch or use the provided pre-signed URL to initiate the download. Handle download errors gracefully and provide user feedback. Ensure compatibility with various browsers and file types.",
+            "status": "done",
+            "testStrategy": "Test downloading photos of different types and sizes. Verify downloads succeed, URLs expire as expected, and error messages display for failed downloads."
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "title": "Mobile Client: Photo Gallery, Tagging, and Download UI",
+        "description": "Develop a mobile interface for viewing, tagging, and downloading uploaded photos.",
+        "details": "Use FlatList for gallery, modal for tag editing, and download via pre-signed URLs. Ensure parity with web features.",
+        "testStrategy": "Verify gallery loads, tags can be edited, and downloads succeed on both iOS and Android.",
+        "priority": "medium",
+        "dependencies": [
+          12,
+          7
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Photo Gallery View Using FlatList",
+            "description": "Develop a performant photo gallery screen using FlatList to display uploaded photos in a scrollable grid or list.",
+            "dependencies": [],
+            "details": "Use React Native's FlatList to render photo thumbnails efficiently. Ensure smooth scrolling and lazy loading for large photo sets. Support both grid and list layouts if possible. Integrate loading indicators and handle empty states using ListEmptyComponent. Fetch photo metadata and images from the backend, ensuring parity with the web gallery features.",
+            "status": "done",
+            "testStrategy": "Verify gallery loads with various photo counts, scrolls smoothly, and displays correctly on iOS and Android. Test empty and loading states."
+          },
+          {
+            "id": 2,
+            "title": "Develop Tag Editing Modal for Photos",
+            "description": "Create a modal interface for viewing and editing tags associated with each photo.",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement a modal that opens when a user selects a photo or tag icon. Allow users to view, add, and remove tags. Ensure tag changes are saved via API calls and reflected in the gallery. Match the tag editing experience to the web client for consistency. Handle error states and provide user feedback on save success or failure.",
+            "status": "done",
+            "testStrategy": "Test opening the modal, editing tags, saving changes, and verifying updates in the gallery. Check for error handling and UI feedback."
+          },
+          {
+            "id": 3,
+            "title": "Enable Photo Download via Pre-Signed URLs",
+            "description": "Add functionality to download photos using pre-signed URLs, ensuring compatibility with mobile file systems.",
+            "dependencies": [
+              1
+            ],
+            "details": "Integrate download buttons or actions for each photo. Use pre-signed URLs to securely fetch images for download. Handle permissions and file saving on both iOS and Android, ensuring files are accessible to the user. Provide download progress and completion feedback. Ensure the download process matches web client capabilities.",
+            "status": "done",
+            "testStrategy": "Test downloading photos of various sizes on both platforms. Verify files are saved correctly and accessible. Check for error handling and user notifications."
+          }
+        ]
+      },
+      {
+        "id": 15,
+        "title": "End-to-End Integration Testing (Backend, Web, Mobile)",
+        "description": "Implement integration tests covering the complete upload flow from client to backend to cloud storage.",
+        "details": "Use JUnit and Testcontainers for backend integration tests. Use Cypress for web E2E tests. Use Detox or Appium for mobile E2E tests. Validate upload, status tracking, and retrieval.",
+        "testStrategy": "Run automated tests simulating batch uploads, status polling, and gallery viewing. Ensure all tests pass.",
+        "priority": "high",
+        "dependencies": [
+          8,
+          13,
+          14
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Backend Integration Test Setup with JUnit and Testcontainers",
+            "description": "Configure backend integration tests using JUnit and Testcontainers to simulate production-like environments.",
+            "dependencies": [],
+            "details": "Set up JUnit test classes that use Testcontainers to spin up required backend services (e.g., database, storage) in Docker containers. Ensure containers are started before tests and stopped after. Implement tests for upload, status tracking, and retrieval endpoints.",
+            "status": "pending",
+            "testStrategy": "Run backend integration tests in isolation, verify upload, status, and retrieval APIs against containerized dependencies."
+          },
+          {
+            "id": 2,
+            "title": "Web End-to-End Test Implementation with Cypress",
+            "description": "Develop Cypress E2E tests for the web client covering the complete upload flow.",
+            "dependencies": [
+              1
+            ],
+            "details": "Create Cypress test suites that automate file upload, status polling, and gallery retrieval on the web UI. Mock or use real backend endpoints as appropriate. Validate UI updates and error handling.",
+            "status": "pending",
+            "testStrategy": "Execute Cypress tests in CI, verify uploads, status updates, and gallery display match backend state."
+          },
+          {
+            "id": 3,
+            "title": "Mobile End-to-End Test Implementation with Detox/Appium",
+            "description": "Implement mobile E2E tests using Detox or Appium to validate upload, status, and retrieval flows.",
+            "dependencies": [
+              1
+            ],
+            "details": "Set up Detox (React Native) or Appium (native/hybrid) test scripts to automate photo upload, status polling, and gallery viewing on mobile devices. Ensure tests run on both iOS and Android simulators/emulators.",
+            "status": "pending",
+            "testStrategy": "Run mobile E2E tests on CI, confirm uploads, status polling, and gallery retrieval work on both platforms."
+          },
+          {
+            "id": 4,
+            "title": "Test Data Setup and Management for Integration Scenarios",
+            "description": "Prepare and manage test data for backend, web, and mobile integration tests.",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Design reusable test data sets (e.g., sample images, metadata) for upload scenarios. Automate data cleanup and initialization before/after test runs to ensure isolation and repeatability.",
+            "status": "pending",
+            "testStrategy": "Verify test data is correctly initialized and cleaned up; ensure tests do not interfere with each other."
+          },
+          {
+            "id": 5,
+            "title": "Batch Upload Simulation Across Clients",
+            "description": "Simulate batch uploads from web and mobile clients to test concurrency and throughput.",
+            "dependencies": [
+              2,
+              3,
+              4
+            ],
+            "details": "Implement tests that upload multiple files (e.g., 100+) concurrently from both web and mobile clients. Monitor backend handling of concurrent uploads and validate system stability.",
+            "status": "pending",
+            "testStrategy": "Check that all files are uploaded successfully, measure performance, and verify no data loss or corruption."
+          },
+          {
+            "id": 6,
+            "title": "Status Polling and Verification Logic",
+            "description": "Test status polling mechanisms for upload progress and completion on all clients.",
+            "dependencies": [
+              2,
+              3,
+              5
+            ],
+            "details": "Automate polling for upload status in web and mobile E2E tests. Validate that progress indicators and completion states are accurate and timely.",
+            "status": "pending",
+            "testStrategy": "Assert that status updates are received as expected and UI reflects backend state correctly."
+          },
+          {
+            "id": 7,
+            "title": "Gallery Retrieval and Validation Tests",
+            "description": "Verify gallery retrieval and display of uploaded photos on web and mobile clients.",
+            "dependencies": [
+              2,
+              3,
+              5,
+              6
+            ],
+            "details": "Implement tests to fetch and display uploaded images in gallery views. Check for correct rendering, metadata, and download functionality. Ensure parity between web and mobile galleries.",
+            "status": "pending",
+            "testStrategy": "Validate that all uploaded images appear in galleries, metadata is correct, and downloads succeed."
+          }
+        ]
+      },
+      {
+        "id": 17,
+        "title": "Documentation: Technical Writeup and AI Tool Usage",
+        "description": "Prepare technical documentation covering architecture, concurrency, cloud storage, and AI tool usage.",
+        "status": "pending",
+        "dependencies": [
+          19
+        ],
+        "priority": "medium",
+        "details": "Document backend architecture, concurrency strategy, cloud storage integration, and division of logic. Include AI tool prompts and justification if used (e.g., Copilot for image tagging). Ensure documentation references build scripts and their integration points where relevant, reflecting dependency on unified build processes.",
+        "testStrategy": "Review documentation for completeness, clarity, and alignment with implementation. Confirm that build script integration points are documented and consistent with Task 19 outputs.",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Document Backend Architecture and Concurrency Strategy",
+            "description": "Create detailed documentation describing the backend architecture, including system context, major components, and concurrency mechanisms.",
+            "dependencies": [],
+            "details": "Use C4 diagrams to illustrate system context, containers, and components. Explain architectural decisions (ADRs), alternatives considered, and consequences. Describe concurrency strategy, including thread management, synchronization, and scalability considerations. Store diagrams and ADRs in a shared documentation platform (e.g., Confluence, Git). Reference build script integration points as relevant to backend deployment and operation.",
+            "status": "pending",
+            "testStrategy": "Review diagrams and written documentation for completeness, clarity, and technical accuracy. Validate that concurrency strategy is clearly explained and aligns with implementation. Confirm documentation covers build script integration points for backend."
+          },
+          {
+            "id": 2,
+            "title": "Document Cloud Storage Integration and Logic Division",
+            "description": "Prepare documentation covering cloud storage integration (e.g., AWS S3) and the division of backend logic.",
+            "dependencies": [
+              1
+            ],
+            "details": "Describe how cloud storage is integrated, including service interfaces, pre-signed URL generation, and security practices. Use diagrams to show data flow between backend and cloud storage. Document the division of logic (e.g., domain, application, infrastructure layers) and explain how responsibilities are separated according to DDD and CQRS principles. Reference build script integration points for cloud storage deployment and configuration.",
+            "status": "pending",
+            "testStrategy": "Verify documentation covers all integration points, security considerations, and logic separation. Ensure diagrams and explanations are consistent with codebase. Confirm documentation includes build script references for cloud storage integration."
+          },
+          {
+            "id": 3,
+            "title": "Document AI Tool Usage, Prompts, and Justification",
+            "description": "Provide documentation on AI tool usage, including prompts, workflows, and justification for their inclusion (e.g., Copilot for image tagging).",
+            "dependencies": [
+              2
+            ],
+            "details": "List all AI tools used in the project, describe their purpose, and include example prompts or configurations. Justify the selection of each tool, referencing project requirements and benefits. Document how AI-generated outputs are integrated into backend workflows and any safeguards or validation steps. Reference build script integration points for AI tool setup or automation if applicable.",
+            "status": "pending",
+            "testStrategy": "Check that all AI tools are documented with clear usage instructions, example prompts, and rationale. Review integration steps for completeness and alignment with project goals. Confirm documentation covers build script integration for AI tools where relevant."
+          }
+        ]
+      },
+      {
+        "id": 18,
+        "title": "Demo Preparation: Video/Live Presentation",
+        "description": "Prepare a demo video or live presentation showing simultaneous uploads and real-time progress on both clients.",
+        "details": "Record or present a session demonstrating batch upload, progress indicators, gallery features, and error handling. Highlight AI features if present.",
+        "testStrategy": "Review demo for coverage of all core requirements and smooth user experience.",
+        "priority": "medium",
+        "dependencies": [
+          17
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Define Demo Script and Agenda",
+            "description": "Create a detailed script and agenda for the demo, outlining the flow, key features to showcase, and timing for each segment.",
+            "dependencies": [],
+            "details": "Research the target audience and tailor the demo script to their needs. Include an engaging introduction, highlight batch upload, progress indicators, gallery features, error handling, and any AI capabilities. Plan the sequence and allocate time for each feature demonstration.",
+            "status": "pending",
+            "testStrategy": "Review the script for coverage of all required features and clarity. Validate agenda timing with a dry run."
+          },
+          {
+            "id": 2,
+            "title": "Prepare Demo Environment and Assets",
+            "description": "Set up both web and mobile clients, ensure all demo features are functional, and gather any necessary assets (sample files, user accounts, etc.).",
+            "dependencies": [
+              1
+            ],
+            "details": "Verify that batch upload, progress indicators, gallery, error handling, and AI features are working on both clients. Prepare sample images or files for upload, configure user accounts, and check technical setup (video recording tools, microphones, screen sharing).",
+            "status": "pending",
+            "testStrategy": "Run a technical check on all demo components. Confirm that all assets load and features perform as expected in a test session."
+          },
+          {
+            "id": 3,
+            "title": "Record or Present Demo and Collect Feedback",
+            "description": "Conduct the demo session (recorded or live), ensuring smooth delivery and coverage of all agenda items. Gather feedback for improvements.",
+            "dependencies": [
+              2
+            ],
+            "details": "Follow the script and agenda during the demo. Demonstrate simultaneous uploads and real-time progress on both clients, gallery features, error handling, and AI capabilities. After the session, solicit feedback from stakeholders or test viewers to refine the presentation.",
+            "status": "pending",
+            "testStrategy": "Review the recorded demo or observe live presentation for completeness and user engagement. Collect and analyze feedback for future iterations."
+          }
+        ]
+      },
+      {
+        "id": 19,
+        "title": "Create Unified Build Scripts for Backend, Web, and Mobile Applications",
+        "description": "Develop and document build scripts for backend (Gradle/Maven), web (npm), and mobile (Expo/React Native) projects, supporting development, testing, and production workflows.",
+        "details": "For the backend, provide shell scripts (e.g., `build-dev.sh`, `build-test.sh`, `build-prod.sh`) that invoke Gradle or Maven tasks for development (`./gradlew bootRun` or `mvn spring-boot:run`), testing (`./gradlew test` or `mvn test`), and production builds (`./gradlew build` or `mvn package`). Ensure scripts detect the presence of Gradle or Maven and fail gracefully if not found. For the web client, define npm scripts in `package.json` for `dev` (e.g., `vite` or `react-scripts start`), `test` (e.g., `jest` or `react-scripts test`), and `build` (e.g., `vite build` or `react-scripts build`). For the mobile client, provide npm scripts and/or shell scripts for Expo/React Native: `start` (development server), `test` (Jest or Detox), and `build` (Expo build or React Native CLI). Scripts should be cross-platform where possible (use `cross-env` for environment variables in npm scripts). Include clear documentation in each project’s README on how to use the scripts, expected prerequisites, and troubleshooting tips. Ensure all scripts are simple to run locally and integrate with CI/CD pipelines.",
+        "testStrategy": "For each project, run the development, test, and production build scripts on a clean environment. Verify that: (1) the backend starts in dev mode, runs tests, and produces a deployable artifact; (2) the web client starts the dev server, runs tests, and outputs a production build; (3) the mobile client launches the dev server, runs tests, and produces a build artifact for at least one platform. Confirm that scripts fail gracefully if prerequisites are missing and that documentation matches actual usage. Test on both Unix-like and Windows systems where feasible.",
+        "status": "pending",
+        "dependencies": [
+          1,
+          9,
+          10
+        ],
+        "priority": "medium",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-11-09T06:01:46.836Z",
+      "updated": "2025-11-09T21:22:18.259Z",
+      "description": "Tasks for master context"
+    }
+  }
+}
