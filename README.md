@@ -115,7 +115,44 @@ git clone https://github.com/yourusername/rapid-photo-uploader.git
 cd rapid-photo-uploader
 ```
 
-### 2. Start Backend
+### 2. Configure Backend Environment
+
+**IMPORTANT: Security Configuration Required**
+
+The `application.properties` file contains sensitive credentials and should NOT be committed to Git.
+
+```bash
+cd backend
+
+# Copy the example configuration
+cp src/main/resources/application.properties.example src/main/resources/application.properties
+
+# Edit with your actual credentials
+nano src/main/resources/application.properties
+```
+
+**Required Configuration**:
+```properties
+# Database (use environment variables in production)
+spring.datasource.url=jdbc:postgresql://localhost:5432/rapidphoto
+spring.datasource.username=rapidphoto
+spring.datasource.password=YOUR_SECURE_PASSWORD
+
+# AWS S3 (use IAM roles in production)
+aws.s3.bucket-name=YOUR_BUCKET_NAME
+aws.s3.region=us-east-1
+
+# JWT Secret (generate a secure random key)
+jwt.secret=YOUR_BASE64_ENCODED_SECRET_KEY
+```
+
+**Security Best Practices**:
+- Never commit `application.properties` with real credentials
+- Use environment variables for production deployments
+- Rotate passwords and secrets regularly
+- Use AWS IAM roles instead of access keys when possible
+
+### 3. Start Backend
 
 ```bash
 # Start PostgreSQL (Docker)
@@ -127,18 +164,14 @@ docker run -d \
   -p 5432:5432 \
   postgres:16
 
-# Configure environment
+# Run backend (after configuring application.properties)
 cd backend
-cp src/main/resources/application.properties.example src/main/resources/application.properties
-# Edit application.properties with your AWS credentials
-
-# Run backend
 ./gradlew bootRun
 ```
 
 Backend runs at: http://localhost:8080
 
-### 3. Start Web Client
+### 4. Start Web Client
 
 ```bash
 cd web-client
@@ -148,7 +181,7 @@ npm run dev
 
 Web app runs at: http://localhost:3000
 
-### 4. Start Mobile Client
+### 5. Start Mobile Client
 
 ```bash
 cd mobile-client
@@ -269,13 +302,76 @@ Running on AWS with modest traffic:
 
 ## Security
 
+### Authentication & Data Protection
 - **JWT Authentication** - 24-hour token expiry
 - **BCrypt Passwords** - Strength 12
 - **Pre-Signed URLs** - 1-hour expiry, no permanent access
-- **IAM Roles** - No hardcoded credentials
+- **IAM Roles** - No hardcoded credentials in production
 - **S3 Encryption** - Server-side encryption (SSE-S3)
 - **Private Bucket** - No public access
 - **User Isolation** - Files stored in user-specific prefixes
+
+### Configuration Security
+
+**CRITICAL**: Never commit sensitive credentials to version control.
+
+#### Files to Exclude from Git
+```
+backend/src/main/resources/application.properties
+.env
+*.pem
+*.key
+```
+
+#### Environment Variables (Production)
+Use environment variables instead of hardcoded values:
+
+```bash
+# Database
+export SPRING_DATASOURCE_URL="jdbc:postgresql://your-rds-endpoint:5432/rapidphoto"
+export SPRING_DATASOURCE_USERNAME="your_username"
+export SPRING_DATASOURCE_PASSWORD="your_secure_password"
+
+# AWS
+export AWS_REGION="us-east-1"
+export AWS_S3_BUCKET_NAME="your-bucket-name"
+
+# JWT
+export JWT_SECRET="your-base64-encoded-secret"
+```
+
+#### Generating Secure Secrets
+
+**JWT Secret** (generate a secure 256-bit key):
+```bash
+# Linux/Mac
+openssl rand -base64 32
+
+# Or use online generator (for development only)
+# https://generate-random.org/base64-string-generator
+```
+
+**Database Password** (strong password):
+```bash
+# Generate 32-character password
+openssl rand -base64 24
+```
+
+#### AWS Credentials
+- **Development**: Use AWS CLI credentials (`~/.aws/credentials`)
+- **Production**: Use IAM instance roles (no keys in code)
+- **Never**: Commit AWS access keys to Git
+
+#### If Credentials Are Compromised
+1. **Immediately rotate** all passwords and keys
+2. **Remove from Git history**:
+   ```bash
+   git filter-branch --force --index-filter \
+     "git rm --cached --ignore-unmatch backend/src/main/resources/application.properties" \
+     --prune-empty --tag-name-filter cat -- --all
+   ```
+3. **Update `.gitignore`** to prevent future commits
+4. **Push changes**: `git push origin --force --all`
 
 ---
 

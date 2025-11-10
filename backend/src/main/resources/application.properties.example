@@ -1,0 +1,64 @@
+# Application Configuration
+spring.application.name=rapid-photo-uploader
+server.port=8080
+
+# Database Configuration (RDS PostgreSQL)
+# IMPORTANT: Replace with your actual database credentials
+spring.datasource.url=${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/rapidphoto}
+spring.datasource.username=${SPRING_DATASOURCE_USERNAME:rapidphoto}
+spring.datasource.password=${SPRING_DATASOURCE_PASSWORD:password}
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+# JPA/Hibernate Configuration
+spring.jpa.hibernate.ddl-auto=validate
+spring.jpa.show-sql=false
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.properties.hibernate.format_sql=true
+
+# Flyway Configuration
+spring.flyway.enabled=true
+spring.flyway.baseline-on-migrate=true
+spring.flyway.locations=classpath:db/migration
+spring.flyway.baseline-version=0
+
+# File Upload Configuration
+spring.servlet.multipart.max-file-size=10MB
+spring.servlet.multipart.max-request-size=100MB
+
+# Actuator Configuration
+management.endpoints.web.exposure.include=health,info
+management.endpoint.health.show-details=when-authorized
+
+# Logging Configuration
+logging.level.com.rapidphoto=INFO
+logging.level.org.springframework.web=INFO
+logging.level.org.hibernate.SQL=DEBUG
+
+# AWS S3 Configuration
+# IMPORTANT: Replace with your actual S3 bucket name
+aws.s3.bucket-name=${AWS_S3_BUCKET_NAME:your-bucket-name}
+aws.s3.region=${AWS_REGION:us-east-1}
+
+# JWT Configuration
+# IMPORTANT: Generate a secure secret key (base64 encoded, 256+ bits)
+# Generate with: openssl rand -base64 32
+jwt.secret=${JWT_SECRET:REPLACE_WITH_SECURE_SECRET}
+jwt.expiration-ms=86400000
+
+# Resilience4j Retry Configuration
+resilience4j.retry.instances.uploadRetry.max-attempts=3
+resilience4j.retry.instances.uploadRetry.wait-duration=2s
+resilience4j.retry.instances.uploadRetry.enable-exponential-backoff=true
+resilience4j.retry.instances.uploadRetry.exponential-backoff-multiplier=2
+resilience4j.retry.instances.uploadRetry.retry-exceptions=java.lang.RuntimeException
+
+# Upload Retry Scheduler Configuration
+upload.retry.scheduler.enabled=true
+upload.retry.scheduler.cron=0 */5 * * * *
+
+# Image Processing Configuration
+image.processing.enabled=true
+image.processing.compression.quality=0.85
+image.processing.thumbnail.size=300
+image.tagging.enabled=false
+
