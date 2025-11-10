@@ -1,0 +1,23 @@
+# Example Terraform Variables
+# Copy this file to terraform.tfvars and customize
+
+aws_region    = "us-east-1"
+project_name  = "rapidphoto"
+environment   = "prod"
+instance_type = "t4g.small"  # ARM-based, ~$12/month
+
+# Database credentials (CHANGE THESE!)
+db_username = "postgres"
+db_password = "RapidPhoto2024SecurePass!"  # Change to a secure password
+
+# SSH access (optional)
+enable_ssh_access = true
+# allowed_ssh_cidr = "1.2.3.4/32"  # Uncomment and set your IP, or it will auto-detect
+
+# Existing infrastructure IDs
+existing_vpc_id         = "vpc-00e884c2c3049dc60"
+existing_rds_identifier = "rapidphoto-db"
+existing_s3_bucket      = "rapidphoto-uploads-297721440242"
+existing_rds_sg_id      = "sg-04bae24dd0a44ce57"
+subnet_id               = "subnet-00f69fe6ab7d3030f"  # us-east-1a
+

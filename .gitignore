@@ -9,8 +9,16 @@ dev-debug.log
 # Dependency directories
 node_modules/
 
-# Environment variables
+# Environment variables and sensitive configuration
 .env
+.env.*
+!.env.example
+
+# Spring Boot application.properties with credentials
+backend/src/main/resources/application.properties
+backend/src/test/resources/application.properties
+!backend/src/main/resources/application.properties.example
+!backend/src/test/resources/application-test.properties
 
 # Editor directories and files
 .idea
@@ -24,6 +32,12 @@ node_modules/
 # OS specific
 .DS_Store
 
-# Add these lines
-*.properties
-!application.properties.example
+# AWS credentials and keys
+*.pem
+*.key
+aws-credentials.json
+
+# Terraform state files (may contain sensitive data)
+terraform/*.tfstate
+terraform/*.tfstate.backup
+terraform/.terraform/
