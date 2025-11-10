@@ -50,6 +50,14 @@
         {
           "cameraPermission": "The app needs access to your camera to take photos."
         }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow this app to save photos to your library.",
+          "savePhotosPermission": "Allow this app to save photos to your library.",
+          "isAccessMediaLocationEnabled": true
+        }
       ]
     ]
   }

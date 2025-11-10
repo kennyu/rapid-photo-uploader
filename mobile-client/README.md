@@ -7,8 +7,12 @@ React Native mobile application for uploading and managing photos, built with Ex
 - 📱 **User Authentication** - Secure login and registration
 - 📷 **Batch Photo Upload** - Upload up to 100 photos at once with S3 pre-signed URLs
 - 🔄 **Real-time Progress** - Track upload progress for each photo
-- 🖼️ **Gallery View** - Browse uploaded photos with thumbnails
-- 🏷️ **Photo Tagging** - Organize photos with tags
+- 🖼️ **Interactive Gallery** - Browse uploaded photos with thumbnails, tap to view details
+- 🔍 **Tag Filtering** - Filter gallery by tags with horizontal scrollable chips
+- 🏷️ **Tag Management** - Add and remove tags from photos via modal interface
+- 📥 **Photo Downloads** - Download full-resolution photos using pre-signed URLs
+  - Web: Opens in new tab
+  - Native: Saves directly to device gallery
 - 🔐 **Secure Storage** - JWT tokens stored in secure device storage
 - 🎯 **Top Navigation Bar** - Easy switching between Upload, Gallery, and Logout
 
@@ -22,6 +26,8 @@ React Native mobile application for uploading and managing photos, built with Ex
 - **Expo Image Picker** - Photo selection
 - **Expo Camera** - Camera access
 - **Expo Secure Store** - Secure token storage
+- **Expo File System** - File downloads
+- **Expo Media Library** - Saving photos to device gallery
 
 ## Prerequisites
 
@@ -148,12 +154,20 @@ The mobile app connects to the Spring Boot backend. Ensure:
 
 ### Required Backend Endpoints
 
+**Authentication:**
 - `POST /api/v1/auth/login` - User login (expects: `email`, `password`)
 - `POST /api/v1/auth/register` - User registration (expects: `email`, `password`, `fullName`)
+
+**Photo Upload:**
 - `POST /api/v1/photos/upload/initiate` - Initiate photo upload (returns S3 pre-signed URL)
 - `POST /api/v1/uploads/:uploadJobId/complete` - Mark upload as complete after S3 upload
-- `GET /api/v1/photos` - Get user's photos (paginated response)
-- `PATCH /api/v1/photos/:id` - Update photo tags
+
+**Gallery & Tags:**
+- `GET /api/v1/photos` - Get user's photos (paginated response with downloadUrl and thumbnailUrl)
+- `GET /api/v1/photos?tag=tagname` - Filter photos by tag
+- `POST /api/v1/photos/:photoId/tags/:tag` - Add a tag to a photo
+- `DELETE /api/v1/photos/:photoId/tags/:tag` - Remove a tag from a photo
+- `PATCH /api/v1/photos/:photoId/tags` - Bulk replace all tags (array of strings)
 
 **Note:** Backend requires passwords to be at least 8 characters.
 
@@ -164,6 +178,37 @@ The app uses a three-step S3 upload process:
 2. **Upload to S3** (30-70% progress): Upload file directly to S3 using the pre-signed URL
 3. **Complete** (70-100% progress): Notify backend via `POST /uploads/{uploadJobId}/complete`
 4. **Process**: Backend processes the photo and updates status to COMPLETE
+
+## Usage
+
+### Gallery Features
+
+**Viewing Photos:**
+- Navigate to the Gallery tab to see all your uploaded photos
+- Pull down to refresh the gallery
+- Tap any photo to open the detail modal
+
+**Filtering by Tags:**
+- Horizontal scrollable tag list appears below the gallery header
+- Tap "All" to show all photos (default)
+- Tap any tag to filter photos by that tag
+- Tag list automatically updates based on all photos in your library
+- Current filter is shown in the gallery subtitle
+
+**Managing Tags:**
+1. Tap a photo in the gallery to open details
+2. View existing tags in the "Tags" section
+3. Add new tags:
+   - Type a tag name in the input field
+   - Press "Add" or hit Enter
+4. Remove tags:
+   - Tap the "✕" button next to any tag
+
+**Downloading Photos:**
+1. Tap a photo to open the detail modal
+2. Scroll down and tap "📥 Download Photo"
+3. On web: Photo opens in a new tab
+4. On native: Photo is saved to your device gallery (requires permission)
 
 ## Building for Production
 
@@ -206,12 +251,21 @@ npx expo prebuild --clean
 
 ## Features Roadmap
 
+**Completed:**
+- [x] User authentication
+- [x] Batch photo upload
+- [x] Gallery view with thumbnails
+- [x] Tag management (add/remove)
+- [x] Tag filtering
+- [x] Photo downloads
+
+**Future Enhancements:**
 - [ ] Offline photo queue
 - [ ] Photo compression before upload
-- [ ] Camera integration
+- [ ] Direct camera integration
 - [ ] Bulk tag editing
 - [ ] Photo deletion
-- [ ] Search and filter
+- [ ] Search by filename
 - [ ] Dark mode
 
 ## License

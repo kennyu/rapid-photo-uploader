@@ -1,0 +1,6 @@
+# Detox artifacts
+artifacts/
+
+# Test reports
+junit.xml
+
