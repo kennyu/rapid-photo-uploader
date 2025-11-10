@@ -23,3 +23,7 @@ node_modules/
 
 # OS specific
 .DS_Store
+
+# Add these lines
+*.properties
+!application.properties.example
