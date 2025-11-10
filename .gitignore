@@ -23,6 +23,7 @@ backend/src/test/resources/application.properties
 # Editor directories and files
 .idea
 .vscode
+.cursor/
 *.suo
 *.ntvs*
 *.njsproj
