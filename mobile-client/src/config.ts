@@ -3,7 +3,7 @@ export const config = {
   // API Configuration
   apiUrl: __DEV__ 
     ? 'http://localhost:8080/api/v1' // Development - change to your local IP if testing on device
-    : 'https://your-production-api.com/api/v1', // Production
+    : 'https://:ec2-54-152-45-144.compute-1.amazonaws.com:8080/api/v1', // Production
 
   // App Configuration
   maxPhotosPerUpload: 100,
