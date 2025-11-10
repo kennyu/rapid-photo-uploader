@@ -115,7 +115,12 @@ resource "aws_s3_bucket_cors_configuration" "main" {
   cors_rule {
     allowed_headers = ["*"]
     allowed_methods = ["GET", "PUT", "POST", "DELETE", "HEAD"]
-    allowed_origins = ["http://localhost:3000", "http://localhost:8080"]
+    allowed_origins = [
+      "http://localhost:3000",
+      "http://localhost:8080",
+      "http://localhost:8081",
+      "https://rapid-photo-uploader.vercel.app"
+    ]
     expose_headers  = ["ETag", "x-amz-server-side-encryption", "x-amz-request-id"]
     max_age_seconds = 3000
   }

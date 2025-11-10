@@ -15,7 +15,7 @@ resource "aws_db_instance" "main" {
   password              = var.db_password
   
   # Security settings
-  publicly_accessible    = false  # Make it private
+  publicly_accessible    = true  # Make it publicly accessible
   vpc_security_group_ids = [var.existing_rds_sg_id]
   db_subnet_group_name   = data.aws_db_instance.main.db_subnet_group
   

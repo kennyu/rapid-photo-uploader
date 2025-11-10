@@ -35,6 +35,28 @@ resource "aws_vpc_security_group_ingress_rule" "backend_api" {
   cidr_ipv4   = "0.0.0.0/0"
 }
 
+# Allow HTTP traffic (port 80) for nginx redirect
+resource "aws_vpc_security_group_ingress_rule" "backend_http" {
+  security_group_id = aws_security_group.backend.id
+  description       = "HTTP access for nginx"
+  
+  from_port   = 80
+  to_port     = 80
+  ip_protocol = "tcp"
+  cidr_ipv4   = "0.0.0.0/0"
+}
+
+# Allow HTTPS traffic (port 443) for SSL
+resource "aws_vpc_security_group_ingress_rule" "backend_https" {
+  security_group_id = aws_security_group.backend.id
+  description       = "HTTPS access for SSL"
+  
+  from_port   = 443
+  to_port     = 443
+  ip_protocol = "tcp"
+  cidr_ipv4   = "0.0.0.0/0"
+}
+
 # Allow all outbound traffic
 resource "aws_vpc_security_group_egress_rule" "backend_egress" {
   security_group_id = aws_security_group.backend.id
@@ -67,4 +89,3 @@ resource "aws_vpc_security_group_ingress_rule" "rds_from_my_ip" {
   ip_protocol = "tcp"
   cidr_ipv4   = local.ssh_cidr
 }
-
