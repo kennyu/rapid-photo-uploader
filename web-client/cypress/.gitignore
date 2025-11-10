@@ -1,0 +1,11 @@
+# Cypress artifacts
+screenshots/
+videos/
+downloads/
+
+# Cypress cache
+.cache/
+
+# Test reports
+results/
+

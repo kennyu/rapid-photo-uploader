@@ -8,7 +8,10 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write \"src/**/*.{ts,tsx,css}\""
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
+    "cypress": "cypress open",
+    "cypress:headless": "cypress run",
+    "test:e2e": "start-server-and-test dev http://localhost:5173 cypress:headless"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.7",
@@ -23,11 +26,13 @@
     "@typescript-eslint/eslint-plugin": "^8.15.0",
     "@typescript-eslint/parser": "^8.15.0",
     "@vitejs/plugin-react": "^4.3.4",
+    "cypress": "^13.15.2",
     "eslint": "^9.15.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.14",
     "globals": "^16.5.0",
     "prettier": "^3.3.3",
+    "start-server-and-test": "^2.0.8",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.46.3",
     "vite": "^6.0.1"
