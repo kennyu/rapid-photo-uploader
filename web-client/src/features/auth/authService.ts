@@ -2,6 +2,7 @@
 
 const AUTH_TOKEN_KEY = 'authToken'
 const USER_KEY = 'user'
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api'
 
 export interface LoginCredentials {
   email: string
@@ -63,7 +64,7 @@ export const isAuthenticated = (): boolean => {
 
 // Login user
 export const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
-  const response = await fetch('http://localhost:8080/api/v1/auth/login', {
+  const response = await fetch(`${API_BASE_URL}/v1/auth/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -91,7 +92,7 @@ export const login = async (credentials: LoginCredentials): Promise<AuthResponse
 
 // Register new user
 export const register = async (userData: RegisterData): Promise<AuthResponse> => {
-  const response = await fetch('http://localhost:8080/api/v1/auth/register', {
+  const response = await fetch(`${API_BASE_URL}/v1/auth/register`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

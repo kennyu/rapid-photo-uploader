@@ -1,6 +1,8 @@
 import { useState, useRef } from 'react'
 import './UploadPage.css'
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api'
+
 interface FileWithProgress {
   file: File
   progress: number
@@ -58,7 +60,7 @@ function UploadPage() {
       )
 
       // Step 1: Get pre-signed URL
-      const initResponse = await fetch('http://localhost:8080/api/v1/photos/upload/initiate', {
+      const initResponse = await fetch(`${API_BASE_URL}/v1/photos/upload/initiate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -99,7 +101,7 @@ function UploadPage() {
       )
 
       // Step 3: Notify backend
-      const completeResponse = await fetch(`http://localhost:8080/api/v1/uploads/${uploadJobId}/complete`, {
+      const completeResponse = await fetch(`${API_BASE_URL}/v1/uploads/${uploadJobId}/complete`, {
         method: 'POST',
         headers: {
           ...(token ? { Authorization: `Bearer ${token}` } : {}),

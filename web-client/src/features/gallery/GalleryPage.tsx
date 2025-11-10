@@ -67,7 +67,7 @@ function GalleryPage() {
           {is403 ? (
             <p>Please make sure you're logged in. Try logging out and logging back in.</p>
           ) : (
-            <p>Make sure the backend is running on http://localhost:8080</p>
+            <p>Make sure the backend is running and accessible.</p>
           )}
         </div>
       </div>
