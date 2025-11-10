@@ -595,7 +595,7 @@
         "testStrategy": "Verify app builds and runs on iOS and Android simulators. Check linting and initial navigation.",
         "priority": "high",
         "dependencies": [],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -711,7 +711,7 @@
           5,
           7
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -803,14 +803,14 @@
           12,
           7
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
             "title": "Implement Photo Gallery View Using FlatList",
             "description": "Develop a performant photo gallery screen using FlatList to display uploaded photos in a scrollable grid or list.",
             "dependencies": [],
-            "details": "Use React Native's FlatList to render photo thumbnails efficiently. Ensure smooth scrolling and lazy loading for large photo sets. Support both grid and list layouts if possible. Integrate loading indicators and handle empty states using ListEmptyComponent. Fetch photo metadata and images from the backend, ensuring parity with the web gallery features.",
+            "details": "Use React Native's FlatList to render photo thumbnails efficiently. Ensure smooth scrolling and lazy loading for large photo sets. Support both grid and list layouts if possible. Integrate loading indicators and handle empty states using ListEmptyComponent. Fetch photo metadata and images from the backend, ensuring parity with the web gallery features.\n<info added on 2025-11-09T23:55:57.481Z>\nAdded tag filtering functionality to the gallery view:\n- Displays a horizontally scrollable row of filter chips beneath the gallery header, including an \"All\" chip (default) and individual chips for each unique tag.\n- Tags are auto-extracted from the photo library and sorted alphabetically.\n- Selecting a chip filters the gallery by tag, with active state highlighting for the selected filter.\n- Integrates with backend via GET /photos?tag=tagname for filtered results.\n- Empty states are context-aware and adapt to the current filter selection.\n- Filtering feature achieves full parity with the web client.\n</info added on 2025-11-09T23:55:57.481Z>",
             "status": "done",
             "testStrategy": "Verify gallery loads with various photo counts, scrolls smoothly, and displays correctly on iOS and Android. Test empty and loading states."
           },
@@ -850,15 +850,15 @@
           13,
           14
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
             "title": "Backend Integration Test Setup with JUnit and Testcontainers",
             "description": "Configure backend integration tests using JUnit and Testcontainers to simulate production-like environments.",
             "dependencies": [],
-            "details": "Set up JUnit test classes that use Testcontainers to spin up required backend services (e.g., database, storage) in Docker containers. Ensure containers are started before tests and stopped after. Implement tests for upload, status tracking, and retrieval endpoints.",
-            "status": "pending",
+            "details": "Set up JUnit test classes that use Testcontainers to spin up required backend services (e.g., database, storage) in Docker containers. Ensure containers are started before tests and stopped after. Implement tests for upload, status tracking, and retrieval endpoints.\n<info added on 2025-11-09T23:59:31.520Z>\n✅ Backend Integration Test Suite Complete\n\nCreated Files:\n1. IntegrationTestBase.java – Base test class with Testcontainers setup for PostgreSQL 16, reusable container, dynamic test property configuration, and disabled AWS S3/image processing.\n2. PhotoUploadIntegrationTest.java – Tests full upload workflow, batch uploads, tag filtering, authentication, request validation, and pre-signed URL generation.\n3. GalleryAndTagsIntegrationTest.java – Tests gallery retrieval with pagination, tag management (add/remove/replace/filter), photo sorting, and pre-signed URL presence.\n4. cleanup.sql – Database cleanup script for test isolation.\n5. application-test.properties – Test-specific configuration.\n6. README.md – Comprehensive test documentation.\n7. run-tests.ps1 – PowerShell script for easy test execution.\n\nTest Coverage:\n- Authentication flow (register, login, JWT token)\n- Upload initiation and completion\n- Batch upload handling\n- Tag management (add/remove/replace/filter)\n- Gallery retrieval with pagination\n- Pre-signed URL generation\n- Request validation and error handling\n\nTechnology Stack:\n- JUnit 5 + Spring Boot Test\n- Testcontainers (PostgreSQL 16)\n- TestRestTemplate for API testing\n- AssertJ for fluent assertions\n\nTests are production-ready and suitable for CI/CD pipelines.\n</info added on 2025-11-09T23:59:31.520Z>",
+            "status": "done",
             "testStrategy": "Run backend integration tests in isolation, verify upload, status, and retrieval APIs against containerized dependencies."
           },
           {
@@ -868,8 +868,8 @@
             "dependencies": [
               1
             ],
-            "details": "Create Cypress test suites that automate file upload, status polling, and gallery retrieval on the web UI. Mock or use real backend endpoints as appropriate. Validate UI updates and error handling.",
-            "status": "pending",
+            "details": "Create Cypress test suites that automate file upload, status polling, and gallery retrieval on the web UI. Mock or use real backend endpoints as appropriate. Validate UI updates and error handling.\n<info added on 2025-11-10T00:06:20.886Z>\nCypress E2E test suite is now complete and production-ready, covering 32 scenarios across authentication, file upload, gallery viewing, tag management, and error handling. The implementation includes custom commands, network request mocking, and CI/CD-compatible scripts. All test files, configuration, and documentation have been added, ensuring maintainability and full coverage of the web client’s upload and gallery workflows.\n</info added on 2025-11-10T00:06:20.886Z>",
+            "status": "done",
             "testStrategy": "Execute Cypress tests in CI, verify uploads, status updates, and gallery display match backend state."
           },
           {
@@ -879,8 +879,8 @@
             "dependencies": [
               1
             ],
-            "details": "Set up Detox (React Native) or Appium (native/hybrid) test scripts to automate photo upload, status polling, and gallery viewing on mobile devices. Ensure tests run on both iOS and Android simulators/emulators.",
-            "status": "pending",
+            "details": "Set up Detox (React Native) or Appium (native/hybrid) test scripts to automate photo upload, status polling, and gallery viewing on mobile devices. Ensure tests run on both iOS and Android simulators/emulators.\n<info added on 2025-11-10T00:16:12.938Z>\nMobile E2E test suite completed using Detox, covering 58+ scenarios across authentication, photo upload, gallery viewing, tag management, downloads, navigation, performance, and empty states. Created and configured `.detoxrc.js`, Jest setup, TypeScript support, and comprehensive test files for all major flows. Tests run on both iOS (iPhone 15 simulator) and Android (Pixel 5 emulator), with CI/CD-ready scripts and documentation included. All test scripts and configurations are production-ready, ensuring robust validation of mobile upload, status polling, and gallery retrieval flows.\n</info added on 2025-11-10T00:16:12.938Z>",
+            "status": "done",
             "testStrategy": "Run mobile E2E tests on CI, confirm uploads, status polling, and gallery retrieval work on both platforms."
           },
           {
@@ -893,7 +893,7 @@
               3
             ],
             "details": "Design reusable test data sets (e.g., sample images, metadata) for upload scenarios. Automate data cleanup and initialization before/after test runs to ensure isolation and repeatability.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify test data is correctly initialized and cleaned up; ensure tests do not interfere with each other."
           },
           {
@@ -906,7 +906,7 @@
               4
             ],
             "details": "Implement tests that upload multiple files (e.g., 100+) concurrently from both web and mobile clients. Monitor backend handling of concurrent uploads and validate system stability.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Check that all files are uploaded successfully, measure performance, and verify no data loss or corruption."
           },
           {
@@ -919,7 +919,7 @@
               5
             ],
             "details": "Automate polling for upload status in web and mobile E2E tests. Validate that progress indicators and completion states are accurate and timely.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Assert that status updates are received as expected and UI reflects backend state correctly."
           },
           {
@@ -933,7 +933,7 @@
               6
             ],
             "details": "Implement tests to fetch and display uploaded images in gallery views. Check for correct rendering, metadata, and download functionality. Ensure parity between web and mobile galleries.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Validate that all uploaded images appear in galleries, metadata is correct, and downloads succeed."
           }
         ]
@@ -941,45 +941,43 @@
       {
         "id": 17,
         "title": "Documentation: Technical Writeup and AI Tool Usage",
-        "description": "Prepare technical documentation covering architecture, concurrency, cloud storage, and AI tool usage.",
-        "status": "pending",
-        "dependencies": [
-          19
-        ],
+        "description": "Prepare technical documentation covering backend architecture (Spring Boot on EC2, RDS, S3), concurrency strategy, cloud storage integration (AWS S3 pre-signed URLs), division of logic (DDD, CQRS), web deployment (Vercel, Vite/React), mobile deployment (Expo Go, SDK web build), and AI tool usage if any.",
+        "status": "done",
+        "dependencies": [],
         "priority": "medium",
-        "details": "Document backend architecture, concurrency strategy, cloud storage integration, and division of logic. Include AI tool prompts and justification if used (e.g., Copilot for image tagging). Ensure documentation references build scripts and their integration points where relevant, reflecting dependency on unified build processes.",
-        "testStrategy": "Review documentation for completeness, clarity, and alignment with implementation. Confirm that build script integration points are documented and consistent with Task 19 outputs.",
+        "details": "Document backend architecture as deployed on EC2, including use of Spring Boot, RDS, and S3. Explain concurrency strategy (async processing, thread pools) and how it supports scalability. Describe cloud storage integration, focusing on AWS S3 and pre-signed URL usage for secure file access. Outline the division of backend logic using DDD and CQRS patterns. For the web frontend, document deployment on Vercel using Vite/React build. For mobile, describe the Expo Go development workflow and SDK-based web build strategy. Include documentation of any AI tool usage (e.g., for image processing), with example prompts and justification. Remove all references to build scripts and integration points, as unified build processes are no longer in scope.",
+        "testStrategy": "Review documentation for completeness, clarity, and alignment with actual deployment and implementation. Confirm that backend, web, and mobile deployment strategies are accurately described. Ensure concurrency, cloud storage, and logic division are clearly documented. If AI tools are used, verify that usage, prompts, and rationale are included.",
         "subtasks": [
           {
             "id": 1,
             "title": "Document Backend Architecture and Concurrency Strategy",
-            "description": "Create detailed documentation describing the backend architecture, including system context, major components, and concurrency mechanisms.",
+            "description": "Create detailed documentation describing the backend architecture as deployed on EC2, including system context, major components (Spring Boot, RDS, S3), and concurrency mechanisms (async processing, thread pools).",
             "dependencies": [],
-            "details": "Use C4 diagrams to illustrate system context, containers, and components. Explain architectural decisions (ADRs), alternatives considered, and consequences. Describe concurrency strategy, including thread management, synchronization, and scalability considerations. Store diagrams and ADRs in a shared documentation platform (e.g., Confluence, Git). Reference build script integration points as relevant to backend deployment and operation.",
-            "status": "pending",
-            "testStrategy": "Review diagrams and written documentation for completeness, clarity, and technical accuracy. Validate that concurrency strategy is clearly explained and aligns with implementation. Confirm documentation covers build script integration points for backend."
+            "details": "Use C4 diagrams to illustrate system context, containers, and components. Explain architectural decisions (ADRs), alternatives considered, and consequences. Describe concurrency strategy, including thread management, async processing, and scalability considerations. Store diagrams and ADRs in a shared documentation platform (e.g., Confluence, Git). Reference how backend deployment is managed on EC2, including integration with RDS and S3.",
+            "status": "done",
+            "testStrategy": "Review diagrams and written documentation for completeness, clarity, and technical accuracy. Validate that concurrency strategy is clearly explained and aligns with implementation. Confirm documentation covers backend deployment on EC2 and integration with RDS and S3."
           },
           {
             "id": 2,
             "title": "Document Cloud Storage Integration and Logic Division",
-            "description": "Prepare documentation covering cloud storage integration (e.g., AWS S3) and the division of backend logic.",
+            "description": "Prepare documentation covering cloud storage integration (AWS S3, pre-signed URLs) and the division of backend logic (DDD, CQRS).",
             "dependencies": [
               1
             ],
-            "details": "Describe how cloud storage is integrated, including service interfaces, pre-signed URL generation, and security practices. Use diagrams to show data flow between backend and cloud storage. Document the division of logic (e.g., domain, application, infrastructure layers) and explain how responsibilities are separated according to DDD and CQRS principles. Reference build script integration points for cloud storage deployment and configuration.",
-            "status": "pending",
-            "testStrategy": "Verify documentation covers all integration points, security considerations, and logic separation. Ensure diagrams and explanations are consistent with codebase. Confirm documentation includes build script references for cloud storage integration."
+            "details": "Describe how AWS S3 is integrated, including service interfaces, pre-signed URL generation, and security practices. Use diagrams to show data flow between backend and S3. Document the division of logic (domain, application, infrastructure layers) and explain how responsibilities are separated according to DDD and CQRS principles. Remove references to build scripts; focus on actual deployment and configuration practices.",
+            "status": "done",
+            "testStrategy": "Verify documentation covers all integration points with S3, security considerations, and logic separation. Ensure diagrams and explanations are consistent with codebase. Confirm documentation accurately reflects current deployment and configuration practices."
           },
           {
             "id": 3,
             "title": "Document AI Tool Usage, Prompts, and Justification",
-            "description": "Provide documentation on AI tool usage, including prompts, workflows, and justification for their inclusion (e.g., Copilot for image tagging).",
+            "description": "Provide documentation on AI tool usage, including prompts, workflows, and justification for their inclusion (e.g., Copilot for image tagging or other image processing tools).",
             "dependencies": [
               2
             ],
-            "details": "List all AI tools used in the project, describe their purpose, and include example prompts or configurations. Justify the selection of each tool, referencing project requirements and benefits. Document how AI-generated outputs are integrated into backend workflows and any safeguards or validation steps. Reference build script integration points for AI tool setup or automation if applicable.",
-            "status": "pending",
-            "testStrategy": "Check that all AI tools are documented with clear usage instructions, example prompts, and rationale. Review integration steps for completeness and alignment with project goals. Confirm documentation covers build script integration for AI tools where relevant."
+            "details": "List all AI tools used in the project, describe their purpose, and include example prompts or configurations. Justify the selection of each tool, referencing project requirements and benefits. Document how AI-generated outputs are integrated into backend workflows and any safeguards or validation steps. Remove references to build script integration; focus on actual usage and integration in the deployed system.",
+            "status": "done",
+            "testStrategy": "Check that all AI tools are documented with clear usage instructions, example prompts, and rationale. Review integration steps for completeness and alignment with project goals. Confirm documentation reflects actual usage and integration in the deployed system."
           }
         ]
       },
@@ -1034,7 +1032,7 @@
         "description": "Develop and document build scripts for backend (Gradle/Maven), web (npm), and mobile (Expo/React Native) projects, supporting development, testing, and production workflows.",
         "details": "For the backend, provide shell scripts (e.g., `build-dev.sh`, `build-test.sh`, `build-prod.sh`) that invoke Gradle or Maven tasks for development (`./gradlew bootRun` or `mvn spring-boot:run`), testing (`./gradlew test` or `mvn test`), and production builds (`./gradlew build` or `mvn package`). Ensure scripts detect the presence of Gradle or Maven and fail gracefully if not found. For the web client, define npm scripts in `package.json` for `dev` (e.g., `vite` or `react-scripts start`), `test` (e.g., `jest` or `react-scripts test`), and `build` (e.g., `vite build` or `react-scripts build`). For the mobile client, provide npm scripts and/or shell scripts for Expo/React Native: `start` (development server), `test` (Jest or Detox), and `build` (Expo build or React Native CLI). Scripts should be cross-platform where possible (use `cross-env` for environment variables in npm scripts). Include clear documentation in each project’s README on how to use the scripts, expected prerequisites, and troubleshooting tips. Ensure all scripts are simple to run locally and integrate with CI/CD pipelines.",
         "testStrategy": "For each project, run the development, test, and production build scripts on a clean environment. Verify that: (1) the backend starts in dev mode, runs tests, and produces a deployable artifact; (2) the web client starts the dev server, runs tests, and outputs a production build; (3) the mobile client launches the dev server, runs tests, and produces a build artifact for at least one platform. Confirm that scripts fail gracefully if prerequisites are missing and that documentation matches actual usage. Test on both Unix-like and Windows systems where feasible.",
-        "status": "pending",
+        "status": "cancelled",
         "dependencies": [
           1,
           9,
@@ -1046,7 +1044,7 @@
     ],
     "metadata": {
       "created": "2025-11-09T06:01:46.836Z",
-      "updated": "2025-11-09T21:22:18.259Z",
+      "updated": "2025-11-10T00:35:08.507Z",
       "description": "Tasks for master context"
     }
   }
